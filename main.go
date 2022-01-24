@@ -10,9 +10,12 @@ func main() {
 		panic(err)
 	}
 
+	//fs.GetRequestToken()
+	//fs.GetAccessToken("14273763c8a943c0b9f97a9cfe01c1f7", "88b8c303e4d049cf9d2294ebaaa9dd18", "9351096")
 	//_, err = fs.RequestToken()
-	_, err = fs.AuthToken()
-	//_, err = fs.GetAuth("73909453")
+	//_, err = fs.GetMonthWeight()
+	//_, err = fs.GetFoodEntryMonth()
+	_, err = fs.GetFoodEntry()
 	if err != nil {
 		panic(err)
 	}
@@ -21,5 +24,4 @@ func main() {
 }
 
 // final
-//oauth_token=11faf9679618496cb5d3e05ecfd7e206&oauth_token_secret=a432f0eefc2543ca
-//8f5877cc17e1f107
+//oauth_token=11faf9679618496cb5d3e05ecfd7e206&oauth_token_secret=a432f0eefc2543ca8f5877cc17e1f107
