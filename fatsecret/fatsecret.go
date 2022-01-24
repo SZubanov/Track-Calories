@@ -19,7 +19,7 @@ type FatSecretConn struct {
 	secret string
 }
 
-var fsurl = "https://www.fatsecret.com/oauth/request_token"
+var fsurl = "http://platform.fatsecret.com/rest/server.api"
 
 func Connect(apikey, secret string) (FatSecretConn, error) {
 	return FatSecretConn{
@@ -28,23 +28,21 @@ func Connect(apikey, secret string) (FatSecretConn, error) {
 	}, nil
 }
 
-func escape(s string) string {
-	return strings.Replace(strings.Replace(url.QueryEscape(s), "+", "%20", -1), "%7E", "~", -1)
-}
-
-func (fs FatSecretConn) GetRequestToken() (io.ReadCloser, error) {
+func (fs FatSecretConn) get(method string, params map[string]string) (io.ReadCloser, error) {
 	reqTime := fmt.Sprintf("%d", time.Now().Unix())
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	m := map[string]string{
+		"method":                 method,
 		"oauth_consumer_key":     fs.apikey,
+		"oauth_nonce":            fmt.Sprintf("%d", r.Int63()),
 		"oauth_signature_method": "HMAC-SHA1",
 		"oauth_timestamp":        reqTime,
-		"oauth_nonce":            fmt.Sprintf("%d", r.Int63()),
 		"oauth_version":          "1.0",
-		//"format":                 "json",
-		"oauth_callback": "oob",
+		"format":                 "json",
 	}
-
+	for k, v := range params {
+		m[k] = v
+	}
 	mk := make([]string, len(m))
 	i := 0
 	for k, _ := range m {
@@ -83,11 +81,14 @@ func (fs FatSecretConn) GetRequestToken() (io.ReadCloser, error) {
 	reqQuery = reqQuery[1:]
 
 	requrl += reqQuery
-	fmt.Println("url :", requrl)
-
+	//fmt.Println("url :", requrl)
 	resp, err := http.Get(requrl)
 	if err != nil {
 		return nil, err
 	}
 	return resp.Body, nil
+}
+
+func escape(s string) string {
+	return strings.Replace(strings.Replace(url.QueryEscape(s), "+", "%20", -1), "%7E", "~", -1)
 }
