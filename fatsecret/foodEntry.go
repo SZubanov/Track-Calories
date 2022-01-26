@@ -1,41 +1,36 @@
 package fatsecret
 
 import (
-	"fmt"
+	"encoding/json"
+	"errors"
+	"github.com/SZubanov/Track-Calories/helpers"
 	"io/ioutil"
 )
 
-func (fs FatSecretConn) GetFoodEntryMonth() (interface{}, error) {
-	resp, err := fs.GetApiMethods(
-		"a432f0eefc2543ca8f5877cc17e1f107",
-		"food_entries.get_month",
-		map[string]string{
-			"oauth_token": "11faf9679618496cb5d3e05ecfd7e206",
-		},
-	)
-	if err != nil {
-		return nil, err
-	}
-	body, err := ioutil.ReadAll(resp)
-	defer resp.Close()
-	fmt.Println(string(body))
-	//foodresp := FoodSearchResponse{}
-	//err = json.Unmarshal(body, &foodresp)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//if foodresp.Error != nil {
-	//	return nil, errors.New(foodresp.Error.Message)
-	//}
-	return body, nil
+type FoodEntriesResponse struct {
+	FoodEntries FoodEntries    `json:"food_entries"`
+	Error       *ErrorResponse `json:"error"`
 }
 
-func (fs FatSecretConn) GetFoodEntry() (interface{}, error) {
+type FoodEntries struct {
+	FoodEntry []FoodEntry `json:"food_entry"`
+}
+
+type FoodEntry struct {
+	ID           string `json:"food_id"`
+	Date         string `json:"date_int"`
+	Calories     string `json:"calories"`
+	Carbohydrate string `json:"carbohydrate"`
+	Protein      string `json:"protein"`
+	Fat          string `json:"fat"`
+	Fiber        string `json:"fiber"`
+}
+
+func (fs FatSecretConnect) GetFoodEntry() (*FoodEntriesResponse, error) {
 	resp, err := fs.GetApiMethods(
-		"a432f0eefc2543ca8f5877cc17e1f107",
 		"food_entries.get",
-		map[string]string{
-			"oauth_token": "11faf9679618496cb5d3e05ecfd7e206",
+		map[string]interface{}{
+			"date": helpers.GetYesterdayUnix(),
 		},
 	)
 	if err != nil {
@@ -43,14 +38,13 @@ func (fs FatSecretConn) GetFoodEntry() (interface{}, error) {
 	}
 	body, err := ioutil.ReadAll(resp)
 	defer resp.Close()
-	fmt.Println(string(body))
-	//foodresp := FoodSearchResponse{}
-	//err = json.Unmarshal(body, &foodresp)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//if foodresp.Error != nil {
-	//	return nil, errors.New(foodresp.Error.Message)
-	//}
-	return body, nil
+	foodresp := FoodEntriesResponse{}
+	err = json.Unmarshal(body, &foodresp)
+	if err != nil {
+		return nil, err
+	}
+	if foodresp.Error != nil {
+		return nil, errors.New(foodresp.Error.Message)
+	}
+	return &foodresp, nil
 }

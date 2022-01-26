@@ -1,27 +1,34 @@
 package main
 
 import (
+	"fmt"
+	"github.com/SZubanov/Track-Calories/config"
 	"github.com/SZubanov/Track-Calories/fatsecret"
 )
 
 func main() {
-	fs, err := fatsecret.Connect("eec54c012a134fa3a3c1cc4f2147c579", "7d6e1365dc9741fba20afec4e61dfd65")
+
+	conf, err := config.NewConfig()
 	if err != nil {
 		panic(err)
 	}
 
-	//fs.GetRequestToken()
-	//fs.GetAccessToken("14273763c8a943c0b9f97a9cfe01c1f7", "88b8c303e4d049cf9d2294ebaaa9dd18", "9351096")
-	//_, err = fs.RequestToken()
-	//_, err = fs.GetMonthWeight()
-	//_, err = fs.GetFoodEntryMonth()
-	_, err = fs.GetFoodEntry()
+	fs, err := fatsecret.Connect(conf.FatSecretApiKey, conf.FatSecretSecret, conf.OAuthToken, conf.OAuthTokenSecret)
 	if err != nil {
 		panic(err)
 	}
 
-	//fmt.Printf("%+v", foods)
+	//monthWeight, err := fs.GetMonthWeight()
+	//weight, err := fatsecret.GetYesterdayWeight(monthWeight.Month)
+	//if err != nil {
+	//	panic(err)
+	//}
+
+	foodEntry, err := fs.GetFoodEntry()
+
+	fmt.Printf("%+v", foodEntry)
+	//if err != nil {
+	//	panic(err)
+	//}
+
 }
-
-// final
-//oauth_token=11faf9679618496cb5d3e05ecfd7e206&oauth_token_secret=a432f0eefc2543ca8f5877cc17e1f107

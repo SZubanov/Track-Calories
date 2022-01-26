@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 )
 
-func (fs FatSecretConn) GetRequestToken() (interface{}, error) {
-	resp, err := fs.GetTokenMethods("", RequestTokenUrl, map[string]string{
+func (fs FatSecretConnect) GetRequestToken() (interface{}, error) {
+	resp, err := fs.GetTokenMethods(RequestTokenUrl, map[string]interface{}{
 		"oauth_callback": "oob",
 	})
 
@@ -19,9 +19,9 @@ func (fs FatSecretConn) GetRequestToken() (interface{}, error) {
 	return body, nil
 }
 
-func (fs FatSecretConn) GetAccessToken(oAuthToken, oAuthSecret, verifierCode string) (interface{}, error) {
-	resp, err := fs.GetTokenMethods(oAuthSecret, AccessTokenUrl, map[string]string{
-		"oauth_token":    oAuthToken,
+func (fs FatSecretConnect) GetAccessToken(verifierCode string) (interface{}, error) {
+	resp, err := fs.GetTokenMethods(AccessTokenUrl, map[string]interface{}{
+		"oauth_token":    fs.oauthToken,
 		"oauth_verifier": verifierCode,
 	})
 
