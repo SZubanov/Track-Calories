@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/SZubanov/Track-Calories/config"
 	"github.com/SZubanov/Track-Calories/fatsecret"
+	"github.com/SZubanov/Track-Calories/google"
+	"time"
 )
 
 func main() {
@@ -18,17 +20,47 @@ func main() {
 		panic(err)
 	}
 
-	//monthWeight, err := fs.GetMonthWeight()
-	//weight, err := fatsecret.GetYesterdayWeight(monthWeight.Month)
-	//if err != nil {
-	//	panic(err)
-	//}
+	monthWeight, err := fs.GetMonthWeight()
+	weight, err := fatsecret.GetYesterdayWeight(monthWeight.Month)
+	if err != nil {
+		panic(err)
+	}
 
 	foodEntry, err := fs.GetFoodEntry()
+	if err != nil {
+		panic(err)
+	}
 
-	fmt.Printf("%+v", foodEntry)
-	//if err != nil {
-	//	panic(err)
-	//}
+	totalDay := fatsecret.GetTotalDayEntry(foodEntry.FoodEntries)
 
+	yesterday := time.Now().AddDate(0, 0, -1)
+	googleFormRequest := google.NewResultRequest(
+		yesterday.Day(),
+		int(yesterday.Month()),
+		yesterday.Year(),
+		weight,
+		totalDay.Calories,
+		totalDay.Carbohydrate,
+		totalDay.Protein,
+		totalDay.Fat,
+		totalDay.Fiber,
+		totalDay.Water,
+	)
+
+	googleFormFields := google.NewFormFields(
+		conf.DayInput,
+		conf.MonthInput,
+		conf.YearInput,
+		conf.WeightInput,
+		conf.CaloriesInput,
+		conf.ProteinInput,
+		conf.FatInput,
+		conf.CarbohydrateInput,
+		conf.FiberInput,
+		conf.WaterInput,
+	)
+
+	google.RequestForm(conf.FormUrl, *googleFormFields, *googleFormRequest)
+
+	fmt.Println("Done!")
 }

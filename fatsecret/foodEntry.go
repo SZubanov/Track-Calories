@@ -13,12 +13,13 @@ type FoodEntriesResponse struct {
 }
 
 type FoodEntries struct {
-	FoodEntry []FoodEntry `json:"food_entry"`
+	Foods []Food `json:"food_entry"`
 }
 
-type FoodEntry struct {
+type Food struct {
 	ID           string `json:"food_id"`
 	Date         string `json:"date_int"`
+	Count        string `json:"number_of_units"`
 	Calories     string `json:"calories"`
 	Carbohydrate string `json:"carbohydrate"`
 	Protein      string `json:"protein"`
