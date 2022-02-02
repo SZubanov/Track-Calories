@@ -21,6 +21,9 @@ func main() {
 	}
 
 	monthWeight, err := fs.GetMonthWeight()
+	if err != nil {
+		panic(err)
+	}
 	weight, err := fatsecret.GetYesterdayWeight(monthWeight.Month)
 	if err != nil {
 		panic(err)
@@ -60,7 +63,10 @@ func main() {
 		conf.WaterInput,
 	)
 
-	google.RequestForm(conf.FormUrl, *googleFormFields, *googleFormRequest)
+	_, err = google.RequestForm(conf.FormUrl, *googleFormFields, *googleFormRequest)
+	if err != nil {
+		panic(err)
+	}
 
 	fmt.Println("Done!")
 }

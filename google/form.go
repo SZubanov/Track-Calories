@@ -2,6 +2,8 @@ package google
 
 import (
 	"fmt"
+	"net/http"
+	"net/url"
 	"strconv"
 )
 
@@ -76,6 +78,13 @@ func NewFormFields(day, month, year, weight, calories, carbohydrate, protein, fa
 	}
 }
 
-func RequestForm(url string, fields FormFields, params ResultRequest) {
+func RequestForm(requestUrl string, fields FormFields, params ResultRequest) (*http.Response, error) {
+	body := params.ToRequestMap(fields)
+	values := url.Values{}
+	for key, value := range body {
+		values.Set(key, value)
+	}
 
+	resp, err := http.PostForm(requestUrl, values)
+	return resp, err
 }

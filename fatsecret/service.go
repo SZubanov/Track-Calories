@@ -22,13 +22,11 @@ func GetYesterdayWeight(daysWeight Month) (float64, error) {
 		if err != nil {
 			return 0, err
 		}
-
 		if dateUnix == helpers.GetYesterdayUnix() {
 			floatWeight := parseFloat(day.Weight)
 			return floatWeight, nil
 		}
 	}
-
 	return 0, nil
 }
 

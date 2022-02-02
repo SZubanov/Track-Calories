@@ -3,6 +3,7 @@ package fatsecret
 import (
 	"encoding/json"
 	"errors"
+	"github.com/SZubanov/Track-Calories/helpers"
 	"io/ioutil"
 )
 
@@ -23,13 +24,15 @@ type Day struct {
 func (fs FatSecretConnect) GetMonthWeight() (*MonthWeightResponse, error) {
 	resp, err := fs.GetApiMethods(
 		"weights.get_month",
-		map[string]interface{}{},
-	)
+		map[string]interface{}{
+			"date": helpers.GetYesterdayUnix(),
+		})
 	if err != nil {
 		return nil, err
 	}
 	body, err := ioutil.ReadAll(resp)
 	defer resp.Close()
+
 	weight := MonthWeightResponse{}
 	err = json.Unmarshal(body, &weight)
 	if err != nil {
