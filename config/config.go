@@ -47,6 +47,7 @@ func NewConfig() (*Config, error) {
 	for i := 0; i < v.NumField(); i++ {
 		tag := t.Field(i).Tag.Get("json")
 		if val, ok := os.LookupEnv(strings.ToUpper(tag)); ok {
+			fmt.Println(val)
 			field := v.Field(i)
 			if field.CanAddr() && field.CanSet() {
 				v.Field(i).SetString(val)
