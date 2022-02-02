@@ -12,6 +12,19 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FATSECRET_APIKEY: ${{ secrets.FATSECRET_APIKEY }}
+      FATSECRET_SECRET: ${{ secrets.FATSECRET_SECRET }}
+      OAUTH_TOKEN: ${{ secrets.OAUTH_TOKEN }}
+      OAUTH_TOKEN_SECRET: ${{ secrets.OAUTH_TOKEN_SECRET }}
+      FORM_URL: ${{ secrets.FORM_URL }}
+      MONTH_INPUT: ${{ secrets.MONTH_INPUT }}
+      YEAR_INPUT: ${{ secrets.YEAR_INPUT }}
+      WEIGHT_INPUT: ${{ secrets.WEIGHT_INPUT }}
+      CALORIES_INPUT: ${{ secrets.CALORIES_INPUT }}
+      CARBOHYDRATE_INPUT: ${{ secrets.CARBOHYDRATE_INPUT }}
+      PROTEIN_INPUT: ${{ secrets.PROTEIN_INPUT }}
+      FAT_INPUT: ${{ secrets.FAT_INPUT }}
+      FIBER_INPUT: ${{ secrets.FIBER_INPUT }}
+      WATER_INPUT: ${{ secrets.WATER_INPUT }}
     environment:
       name: env
     steps:
@@ -23,4 +36,4 @@ jobs:
         go-version: 1.17
 
     - name: Build
-      run: go run . -e FATSECRET_APIKEY
+      run: go run . -e FATSECRET_APIKEY -e FATSECRET_SECRET -e OAUTH_TOKEN -e OAUTH_TOKEN_SECRET -e FORM_URL -e MONTH_INPUT -e YEAR_INPUT -e WATER_INPUT -e FIBER_INPUT -e FAT_INPUT -e PROTEIN_INPUT -e CARBOHYDRATE_INPUT -e CALORIES_INPUT -e WEIGHT_INPUT
