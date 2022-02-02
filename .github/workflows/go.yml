@@ -10,6 +10,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      FATSECRET_APIKEY: ${{ secrets.FATSECRET_APIKEY }}
     environment:
       name: env
     steps:
@@ -21,4 +23,4 @@ jobs:
         go-version: 1.17
 
     - name: Build
-      run: go run .
+      run: go run . -e FATSECRET_APIKEY

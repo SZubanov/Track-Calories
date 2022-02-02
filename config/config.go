@@ -46,9 +46,6 @@ func NewConfig() (*Config, error) {
 
 	for i := 0; i < v.NumField(); i++ {
 		tag := t.Field(i).Tag.Get("json")
-		fmt.Println(os.Getenv("FORM_URL"))
-		fmt.Println(os.LookupEnv(strings.ToUpper(tag)))
-
 		if val, ok := os.LookupEnv(strings.ToUpper(tag)); ok {
 			field := v.Field(i)
 			if field.CanAddr() && field.CanSet() {
