@@ -56,9 +56,9 @@ func main() {
 		conf.YearInput,
 		conf.WeightInput,
 		conf.CaloriesInput,
+		conf.CarbohydrateInput,
 		conf.ProteinInput,
 		conf.FatInput,
-		conf.CarbohydrateInput,
 		conf.FiberInput,
 		conf.WaterInput,
 	)
